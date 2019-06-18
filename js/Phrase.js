@@ -37,8 +37,8 @@
  	/**
  	 * Check to see if the letter selected by the player matches a letter in the phrase.
  	 */
- 	checkLetter() {
- 		
+ 	checkLetter(letter) {
+ 		return this.phrase.includes(letter);
  	}
  	
  	/**
@@ -46,12 +46,8 @@
  	 */
  	showMatchedLetter(letter) {
  		const letterElements = document.querySelectorAll('.' + letter);
- 		console.log(letterElements);
  		letterElements.forEach(letterElement => {
  			letterElement.className = 'show letter ' + letter;
  		});
  	}
  }
-const phrase = new Phrase('hello world');
-phrase.addPhraseToDisplay();
-phrase.showMatchedLetter('l')

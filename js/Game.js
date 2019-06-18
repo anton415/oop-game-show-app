@@ -32,7 +32,7 @@
  	 * phrases stored in the phrases array and returns it.
  	 */
  	getRandomPhrase() {
- 		return this.phrases[0];
+ 		return this.phrases[Math.floor(Math.random() * this.phrases.length)];
  	}
  	
  	/**

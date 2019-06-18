@@ -5,7 +5,7 @@
  	/**
  	 * @missed: used to track the number of missed guesses by the player.
  	 * @phrases: an array of five Phrase objects to use with the game.
- 	 * @activePhrase: THis is the Phrase object that's currently in play.
+ 	 * @activePhrase: This is the Phrase object that's currently in play.
  	 */
  	constructor(missed = 0, phrases, activePhrase = null) {
  		this.missed = missed;
@@ -21,7 +21,10 @@
  	 * object.
  	 */
  	startGame() {
- 		
+ 		document.getElementById('overlay').style = 'visibility: hidden';
+ 		this.activePhrase = this.getRandomPhrase();
+ 		const phrase = new Phrase(this.activePhrase);
+ 		phrase.addPhraseToDisplay();
  	}
  	
  	/**
@@ -29,7 +32,7 @@
  	 * phrases stored in the phrases array and returns it.
  	 */
  	getRandomPhrase() {
- 	
+ 		return this.phrases[0];
  	}
  	
  	/**

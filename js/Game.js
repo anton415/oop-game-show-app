@@ -22,9 +22,10 @@
  	 */
  	startGame() {
  		document.getElementById('overlay').style = 'visibility: hidden';
+ 		document.getElementById('overlay').className = 'start';
+
  		this.activePhrase = new Phrase(this.getRandomPhrase());
  		this.activePhrase.addPhraseToDisplay();
- 		this.handleInteraction();
  	}
  	
  	/**
@@ -50,11 +51,16 @@
  				
  				if(this.activePhrase.checkLetter(keyElement.textContent)) {
  					this.activePhrase.showMatchedLetter(keyElement.textContent);
+ 					keyElement.className = 'chosen';
  				} else {
  					this.removeLife();
+ 					keyElement.className = 'wrong';
  				}
- 				
- 				this.checkForWin();
+ 				if(this.missed === 5) {
+ 					this.gameOver();
+ 				} else {
+ 					this.checkForWin();
+ 				}
  			});
  		});
  	}
@@ -67,16 +73,11 @@
  	 * then end the game by calling the gameOver() method.
  	 */
  	removeLife() {
- 		if(this.missed === 5) {
- 			this.gameOver();
- 		} else {
-
- 			let liveHearts = document.querySelectorAll('img');
- 			let liveHeart = liveHearts[this.missed];
- 			liveHeart.src = 'images/lostHeart.png';
- 			
- 			this.missed++;
- 		}
+ 		let liveHearts = document.querySelectorAll('img');
+ 		let liveHeart = liveHearts[this.missed];
+ 		liveHeart.src = 'images/lostHeart.png';
+ 		
+ 		this.missed++;
  	}
  	
  	/**
@@ -86,7 +87,13 @@
  	checkForWin() {
  		let countOfHideLetters = document.querySelectorAll('.hide').length;
  		if(countOfHideLetters == 0) {
- 			this.gameOver();
+ 			document.getElementById('overlay').className = 'win';
+ 			document.getElementById('overlay').style = 'visibility: visible';
+ 			
+ 			this.resetPhraseFromBoard();
+ 			this.resetHearts();
+ 			this.resetAllChosenLetters();
+ 			this.resetMainParameters();
  		}
  	}
  	
@@ -95,17 +102,52 @@
  	 * and depending on the outcome of the game, updates the overlay.
  	 */
  	gameOver() {
+ 	 	document.getElementById('overlay').className = 'lose';
  		document.getElementById('overlay').style = 'visibility: visible';
  		
- 		// reset phrase from board.
- 		const ulElement = document.querySelector('ul');
+		this.resetPhraseFromBoard();
+ 		this.resetHearts();
+ 		this.resetAllChosenLetters();
+ 		this.resetMainParameters();
+ 	}
+ 	
+ 	/**
+ 	 * Reset phrase from board.
+ 	 */
+ 	resetPhraseFromBoard() {
+ 	 	const ulElement = document.querySelector('ul');
  		while(ulElement.firstChild) {
  			ulElement.removeChild(ulElement.firstChild);
  		}
- 		// reset hearts.
- 		const allHearts = document.querySelectorAll('img');
+ 	}
+ 	
+ 	/**
+ 	 * Reset hearts.
+ 	 */
+ 	resetHearts() {
+ 	 	const allHearts = document.querySelectorAll('img');
  		allHearts.forEach(heart => {
  			heart.src =  'images/liveHeart.png';
  		});
  	}
+ 	
+ 	/**
+ 	 * Reset All Chosen Letters.
+ 	 */
+ 	resetAllChosenLetters() {
+ 		let keyElements = document.querySelectorAll('.chosen');
+ 		keyElements.forEach((keyElement) => {
+ 			keyElement.className = '';
+ 		});
+ 		
+ 		keyElements = document.querySelectorAll('.wrong');
+ 		keyElements.forEach((keyElement) => {
+ 			keyElement.className = '';
+ 		});
+ 	}
+ 	
+ 	resetMainParameters() {
+ 		this.missed = 0;
+ 	}
+ 	
  }

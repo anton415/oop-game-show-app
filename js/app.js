@@ -1,9 +1,9 @@
 /* Treehouse FSJS Techdegree
  * Project 4 - OOP Game App
  * app.js */
- 	let game;
+const game = new Game();
+game.handleInteraction();
 document.getElementById('btn__reset').addEventListener('click', () => {
-	game = new Game();
 	game.startGame();
 });
 

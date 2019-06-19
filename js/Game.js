@@ -7,7 +7,7 @@
  	 * @phrases: an array of five Phrase objects to use with the game.
  	 * @activePhrase: This is the Phrase object that's currently in play.
  	 */
- 	constructor(missed = 0, phrases, activePhrase = null) {
+ 	constructor(missed = 0, phrases = ['hello world', 'hi there', 'game over', 'test me', 'OOP game'], activePhrase = null) {
  		this.missed = missed;
  		this.phrases = phrases;
  		this.activePhrase = activePhrase;
@@ -22,9 +22,9 @@
  	 */
  	startGame() {
  		document.getElementById('overlay').style = 'visibility: hidden';
- 		this.activePhrase = this.getRandomPhrase();
- 		const phrase = new Phrase(this.activePhrase);
- 		phrase.addPhraseToDisplay();
+ 		this.activePhrase = new Phrase(this.getRandomPhrase());
+ 		this.activePhrase.addPhraseToDisplay();
+ 		this.handleInteraction();
  	}
  	
  	/**
@@ -42,7 +42,21 @@
  	 * or incorrect guess.
  	 */
  	handleInteraction() {
- 	
+ 		// get all key elements
+ 		const keyElements = document.querySelectorAll('.key');
+ 		// add eventListener to all key elements
+ 		keyElements.forEach(keyElement => {
+ 			keyElement.addEventListener('click', () => {
+ 				
+ 				if(this.activePhrase.checkLetter(keyElement.textContent)) {
+ 					this.activePhrase.showMatchedLetter(keyElement.textContent);
+ 				} else {
+ 					this.removeLife();
+ 				}
+ 				
+ 				this.checkForWin();
+ 			});
+ 		});
  	}
  	
  	/**
@@ -53,7 +67,16 @@
  	 * then end the game by calling the gameOver() method.
  	 */
  	removeLife() {
- 	
+ 		if(this.missed === 5) {
+ 			this.gameOver();
+ 		} else {
+
+ 			let liveHearts = document.querySelectorAll('img');
+ 			let liveHeart = liveHearts[this.missed];
+ 			liveHeart.src = 'images/lostHeart.png';
+ 			
+ 			this.missed++;
+ 		}
  	}
  	
  	/**
@@ -61,7 +84,10 @@
  	 * revealed all of the letters in the active phrase.
  	 */
  	checkForWin() {
- 	
+ 		let countOfHideLetters = document.querySelectorAll('.hide').length;
+ 		if(countOfHideLetters == 0) {
+ 			this.gameOver();
+ 		}
  	}
  	
  	/**
@@ -69,6 +95,17 @@
  	 * and depending on the outcome of the game, updates the overlay.
  	 */
  	gameOver() {
- 	
+ 		document.getElementById('overlay').style = 'visibility: visible';
+ 		
+ 		// reset phrase from board.
+ 		const ulElement = document.querySelector('ul');
+ 		while(ulElement.firstChild) {
+ 			ulElement.removeChild(ulElement.firstChild);
+ 		}
+ 		// reset hearts.
+ 		const allHearts = document.querySelectorAll('img');
+ 		allHearts.forEach(heart => {
+ 			heart.src =  'images/liveHeart.png';
+ 		});
  	}
  }

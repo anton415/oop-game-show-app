@@ -11,6 +11,7 @@
  		this.missed = missed;
  		this.phrases = phrases;
  		this.activePhrase = activePhrase;
+ 		this.handleInteraction();
  	}
  	
  	/**

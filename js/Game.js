@@ -7,7 +7,7 @@
  	 * @phrases: an array of five Phrase objects to use with the game.
  	 * @activePhrase: This is the Phrase object that's currently in play.
  	 */
- 	constructor(missed = 0, phrases = ['hello world', 'hi there', 'game over', 'test me', 'OOP game'], activePhrase = null) {
+ 	constructor(missed = 0, phrases = [new Phrase('hello world'), new Phrase('hi there'), new Phrase('game over'), new Phrase('test me'), new Phrase('OOP game')], activePhrase = null) {
  		this.missed = missed;
  		this.phrases = phrases;
  		this.activePhrase = activePhrase;
@@ -25,7 +25,7 @@
  		document.getElementById('overlay').style = 'visibility: hidden';
  		document.getElementById('overlay').className = 'start';
 
- 		this.activePhrase = new Phrase(this.getRandomPhrase());
+ 		this.activePhrase = this.getRandomPhrase();
  		this.activePhrase.addPhraseToDisplay();
  	}
  	
@@ -43,27 +43,16 @@
  	 * letter in the phrase, and then directs the game based on a correct
  	 * or incorrect guess.
  	 */
- 	handleInteraction() {
- 		// get all key elements
- 		const keyElements = document.querySelectorAll('.key');
- 		// add eventListener to all key elements
- 		keyElements.forEach(keyElement => {
- 			keyElement.addEventListener('click', () => {
- 				
- 				if(this.activePhrase.checkLetter(keyElement.textContent)) {
- 					this.activePhrase.showMatchedLetter(keyElement.textContent);
- 					keyElement.className = 'chosen';
- 				} else {
- 					this.removeLife();
- 					keyElement.className = 'wrong';
- 				}
- 				if(this.missed === 5) {
- 					this.gameOver();
- 				} else {
- 					this.checkForWin();
- 				}
- 			});
- 		});
+ 	handleInteraction(e) {
+ 		if(this.activePhrase && this.activePhrase.checkLetter(e.textContent)) {
+ 			this.activePhrase.showMatchedLetter(e.textContent);
+ 			e.className = 'chosen';
+ 			this.checkForWin();
+ 		} else if(this.activePhrase) {
+ 			e.className = 'wrong';
+ 			e.disabled = true;
+ 			this.removeLife();
+ 		}
  	}
  	
  	/**
@@ -79,6 +68,10 @@
  		liveHeart.src = 'images/lostHeart.png';
  		
  		this.missed++;
+ 		
+ 		if(this.missed === 5) {
+ 			this.gameOver();
+ 		}
  	}
  	
  	/**
@@ -139,11 +132,13 @@
  		let keyElements = document.querySelectorAll('.chosen');
  		keyElements.forEach((keyElement) => {
  			keyElement.className = '';
+ 			keyElement.disabled = false;
  		});
  		
  		keyElements = document.querySelectorAll('.wrong');
  		keyElements.forEach((keyElement) => {
  			keyElement.className = '';
+ 			keyElement.disabled = false;
  		});
  	}
  	

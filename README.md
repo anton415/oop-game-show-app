@@ -19,7 +19,7 @@ A player can guess a letter only once. After they’ve guessed a letter, my prog
 
 ----
 ## Live version
-[OOP game show app](http://serdyuchenko.com/oop-game-show-app/)
+[OOP game show app](https://serdyuchenko.com/oop-game-show-app/)
 
 ----
 ## Instruction for run project

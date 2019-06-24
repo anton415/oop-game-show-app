@@ -44,13 +44,14 @@
  	 * or incorrect guess.
  	 */
  	handleInteraction(e) {
-
  	 	if(this.activePhrase) {
  	 	 	e.disabled = true;
  			if(this.activePhrase.checkLetter(e.textContent)) {
  				this.activePhrase.showMatchedLetter(e.textContent);
  				e.className = 'chosen';
- 				this.checkForWin();
+ 				if(this.checkForWin()) {
+ 					this.gameOver('win');
+ 				}
  			} else if(this.activePhrase) {
  				e.className = 'wrong';
  				this.removeLife();
@@ -73,7 +74,7 @@
  		this.missed++;
  		
  		if(this.missed === 5) {
- 			this.gameOver();
+ 			this.gameOver('lose');
  		}
  	}
  	
@@ -84,13 +85,9 @@
  	checkForWin() {
  		let countOfHideLetters = document.querySelectorAll('.hide').length;
  		if(countOfHideLetters == 0) {
- 			document.getElementById('overlay').className = 'win';
- 			document.getElementById('overlay').style = 'visibility: visible';
- 			
- 			this.resetPhraseFromBoard();
- 			this.resetHearts();
- 			this.resetAllChosenLetters();
- 			this.resetMainParameters();
+			return true;
+ 		} else {
+ 			return false;
  		}
  	}
  	
@@ -98,10 +95,15 @@
  	 * Method displays the original start screen overlay,
  	 * and depending on the outcome of the game, updates the overlay.
  	 */
- 	gameOver() {
- 	 	document.getElementById('overlay').className = 'lose';
+ 	gameOver(result) {
+ 		if(result === 'lose') {
+ 		 	document.getElementById('overlay').className = 'lose';
+ 		} else if(result === 'win') {
+ 		 	document.getElementById('overlay').className = 'win';
+ 		}
+
  		document.getElementById('overlay').style = 'visibility: visible';
- 		
+ 		 			
 		this.resetPhraseFromBoard();
  		this.resetHearts();
  		this.resetAllChosenLetters();

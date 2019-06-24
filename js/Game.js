@@ -44,14 +44,17 @@
  	 * or incorrect guess.
  	 */
  	handleInteraction(e) {
- 		if(this.activePhrase && this.activePhrase.checkLetter(e.textContent)) {
- 			this.activePhrase.showMatchedLetter(e.textContent);
- 			e.className = 'chosen';
- 			this.checkForWin();
- 		} else if(this.activePhrase) {
- 			e.className = 'wrong';
- 			e.disabled = true;
- 			this.removeLife();
+
+ 	 	if(this.activePhrase) {
+ 	 	 	e.disabled = true;
+ 			if(this.activePhrase.checkLetter(e.textContent)) {
+ 				this.activePhrase.showMatchedLetter(e.textContent);
+ 				e.className = 'chosen';
+ 				this.checkForWin();
+ 			} else if(this.activePhrase) {
+ 				e.className = 'wrong';
+ 				this.removeLife();
+ 			}
  		}
  	}
  	
